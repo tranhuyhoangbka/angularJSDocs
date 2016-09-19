@@ -1,0 +1,7 @@
+dateTimeSvc.getDate = function () {
+return new Date().toDateString();
+}
+ 
+dateTimeSvc.getTime = function () {
+return new Date().toTimeString();
+}

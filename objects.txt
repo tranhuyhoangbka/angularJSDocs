@@ -1,0 +1,17 @@
+1, how create method in object. Notice, using this to refer to its
+var myData = {
+    name: "Adam",
+    weather: "sunny",
+    gettings: function(){
+      console.log("hello, I am "+this.name+". It is " + this.weather);
+    }
+  };
+  myData.gettings();
+
+2, Xóa các thuộc tính, methods trong object dùng delete keywword
+delete myData.name
+delete myData['weather']
+delete myData.gettings 
+
+3, Xác định xem liệu một thuộc tính có thuộc object không
+"name" in myData; => true  

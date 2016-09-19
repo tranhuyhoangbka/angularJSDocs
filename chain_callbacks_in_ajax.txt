@@ -1,0 +1,9 @@
+myApp.controller("demoCtrl", function ($scope, $http) {
+  $http.get("todo.json").then(function (response) {
+    $scope.todos = response.data;
+  }, function () {
+    $scope.todos = [{action: "Error"}];
+  }).then(function () {
+    $scope.todos.push({action: "Request Complete"});
+  });
+});

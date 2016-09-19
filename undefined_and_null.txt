@@ -1,0 +1,11 @@
+1, undefined và null là 2 giá trị đặc biệt của javascript
+undefined được trả về khi đọc một biến mà không có giá trị được gán tới nó, hoặc cố gắng đọc một thuộc tính
+của object mà không tồn tại 
+var myData = {
+ name: "Adam",
+ weather: "sunny",
+};
+console.log("Prop: " + myData.doesntexist);
+
+2, 
+null được dùng khi bạn muốn chỉ ra rằng bạn đã gán một giá trị cho biến nhưng nó không phải là object, string, number, or boolean, you have defined a value of no value

@@ -1,0 +1,38 @@
+angular.isFunction(obj)
+angular.isString(string)
+angular.lowercase(string)
+angular.uppercase(string)
+angular.isArray(obj)
+angular.isNumber(num) true when num param is an integer, or float
+angular.isObject(obj)
+angular.equals(v1, v2)=> nếu các params là số thì method trả về true nếu v1 === v2, nếu param là object thì method trả 
+vể true nếu các thuộc tính và method của chúng giống hệt nhau. Method này được dùng cho việc so sánh 2 object có bằng nhau ko
+angular.isDefined()
+angular.isUndefined()
+angular.fromJson()
+angular.toJson()
+-----------
+javascript có hỗ trợ ++, -- cũng như ?:
+
+------------
+switch case
+
+switch (name) {
+  case "Adam":
+    console.log("Name is Adam");
+    break;
+  case "Jacqui":
+    console.log("Name is Jacqui");
+    break;
+  default:
+    console.log("Name is neither Adam or Jacqui");
+    break;
+}
+
+3, convert number tới string
+(5).toString() + String(5);
+
+4, convert string tới number
+Number(firstVal) + Number(secondVal);
+parseInt(str)
+parseFloat(str)

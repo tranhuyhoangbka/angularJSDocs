@@ -1,0 +1,8 @@
+1, undefined và null là 2 giá trị đặc biệt của javascript
+undefined được trả về khi đọc một biến mà không có giá trị được gán tới nó, hoặc cố gắng đọc một thuộc tính
+của object mà không tồn tại 
+var myData = {
+ name: "Adam",
+ weather: "sunny",
+};
+console.log("Prop: " + myData.doesntexist);

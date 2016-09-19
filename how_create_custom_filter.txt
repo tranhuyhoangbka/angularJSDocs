@@ -1,0 +1,24 @@
+angular/filters/todo_filters.js
+'use strict';
+angular.module('myApp').filter('checkedItems', function(){
+  return function(items, showCompleted) {
+    var result = [];
+    angular.forEach(items, function(item) {
+      if(item.done === 'No' || showCompleted) {
+        result.push(item);
+      }
+    });
+    return result;
+  }
+});
+- ở đây thì items là một tham số mặc định do angular filter cung cấp, còn showCompleted là một tham số được tôi thêm vào cho filter, giá trị của nó được truyền vào từ ngoài view 
+- require this file to application.js
+- finally, using it for view
+
+
+<tr ng-repeat="item in vm.model.todo | checkedItems:showCompleted | orderBy: 'desc' track by $index">
+          <td ng-bind="item.desc"></td>
+          <td><input type="checkbox" ng-model="item.done" ng-true-value="'Yes'" ng-false-value="'No'"></td>
+        </tr>
+<input type="checkbox" ng-model="showCompleted"> Show complete items
+

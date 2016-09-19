@@ -1,0 +1,34 @@
+var todoApp = angular.module("todoApp", []);
+ 
+todoApp.run(function ($http) {
+  $http.get("todo.json").success(function (data) {
+    model.items = data;
+  });
+});
+
+---------------------
+
+"use strict";
+angular.module('myApp').controller('myController', myController);
+myController.$inject = ["$location", "$http"];
+
+function myController($location, $http) {
+vm.model = {
+    name: "huyhoang"
+  }
+  vm.test = "let start";
+  $http.get('/action_list').success(function(data) {
+    vm.model.items = data;
+  });
+}
+
+dùng $http service để gọi những ajaxt request ở level thấp, nhưng nó không phải level thấp nhất khi so sánh với $resouces
+service, $resouces được dùng để tương tác với resful web services
+ ----------------------------------------------
+
+myApp.controller("demoCtrl", function ($scope, $http) {
+  var promise = $http.get("todo.json");
+  promise.success(function (data) {
+    $scope.todos = data;
+  });
+});
