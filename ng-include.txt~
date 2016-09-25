@@ -1,0 +1,16 @@
+để dùng được ng-include trong rails buộc phải cài thêm gem angular-rails-templates
+application.js thêm
+//= require angular-rails-templates
+//= require_tree ./templates
+thêm các file template tới app/assets/javascripts/templates
+ví dụ: foo.html.erb
+Thêm dependency templates tới angular module
+angular.module('myApplication', ['templates']);
+
+cách dùng template:
+yourTemplate.html.erb 
+{
+  templateUrl: 'yourTemplate.html'
+}
+
+<div ng-include='"yourTemplate.html"'></div>

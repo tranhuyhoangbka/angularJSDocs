@@ -7,11 +7,3 @@ myApp.controller("demoCtrl", function ($scope, $http) {
     $scope.todos.push({action: "Request Complete"});
   });
 });
-
-
--------------
-$http.get(dataUrl).success(function(data) {
-      $scope.data.products = data;
-    }).error(function(error) {
-      $scope.data.error = error;
-    });
