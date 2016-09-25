@@ -1,0 +1,3 @@
+order_by fiter được thiết kết để dùng cho object array, để sắp xếp một mảng của các string làm như sau:
+myStringArray | orderBy:'toString()'
+

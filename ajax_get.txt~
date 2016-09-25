@@ -32,10 +32,3 @@ myApp.controller("demoCtrl", function ($scope, $http) {
     $scope.todos = data;
   });
 });
---------------
-adminService.getMasterData({type: 'edu_information'}).then(function(res) {
-      angular.extend(userData.options.eduInformation, res);
-      vm.options = angular.copy(userData.options.eduInformation);
-      vm.eduInfo.rawAreas = [vm.options.areas[0]];
-    }, function(error) {
-    });

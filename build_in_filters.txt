@@ -1,0 +1,4 @@
+{{item.price | currency | orderBy:'category'}}
+1, currency
+2, orderBy
+3, limitTo
