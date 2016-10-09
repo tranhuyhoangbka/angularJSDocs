@@ -1,0 +1,41 @@
+angular.module('module_name', []).directive('cartSumary', function(cart) {
+    return {
+      restrict: "E",
+      templateUrl: "cartSumary.html",
+      controller: function($scope) {
+        var cartData = cart.getProducts();
+        $scope.total = function() {
+          var total = 0;
+          _.forEach(cartData, function(p, index) {
+            total += p.price * p.count;
+          });
+          return total;
+        };
+
+        $scope.itemCount = function() {
+          var count = 0;
+          _.forEach(cartData, function(p) {
+            count += p.count;
+          });
+          return count;
+        };
+      }
+    };
+  });
+
+cart is a service
+------------------
+cartSumary.html
+<style>
+  .navbar-right {float: right !important; margin-right: 5px;}
+  .navbar-text {margin-right: 10px}
+</style>
+
+<div class="navbar-right">
+  <div class="navbar-text">
+    <b>Your cart:</b>
+    {{itemCount()}} item(s),
+    {{total() | currency}}
+  </div>
+  <a class="btn btn-default navbar-btn">Checkout</a>
+</div>

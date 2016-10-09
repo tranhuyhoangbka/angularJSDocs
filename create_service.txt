@@ -1,0 +1,35 @@
+1, C1: use module().factory
+
+'use strict';
+angular.module('cart', [])
+  .factory('cart', function() {
+    var cartData = [];
+    return {
+      addProduct: function(id, name, price) {
+        var addedToExistingItem = false;
+        _.forEach(cartData, function(p, index) {
+          if(p.id === id) {
+            cartData[index].count++;
+            addedToExistingItem = true;
+            break;
+          }
+        });
+        if(!addedToExistingItem) {
+          cartData.push({count: 1, id: id, name: name, price: price});
+        }
+      },
+
+      removeProduct: function(id) {
+        _.forEach(cartData, function(p, index) {
+          if(p.id === id) {
+            cartData[index].splice(index, 1);
+            break;
+          }
+        });
+      },
+
+      getProducts: function() {
+        return cartData;
+      }
+    };
+  });

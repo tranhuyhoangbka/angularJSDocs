@@ -1,0 +1,22 @@
+1, file application.js
+//= require angular/ngmodules/angular-route.min
+
+2, file dinh nghia module
+angular.module('sportsStore', ['customFilters', 'templates', 'cart', 'ngRoute'])
+  .config(function($routeProvider) {
+    $routeProvider.when('/checkout', {
+      templateUrl: 'checkoutSumary.html'
+    })
+    .when('/products', {
+      templateUrl: 'productList.html'
+    })
+    .otherwise({
+      templateUrl: 'productList.html'
+    });
+  });
+
+3, file view them
+<ng-view />
+4, access to urls
+http://localhost:3000/products#/checkout
+http://localhost:3000/products#/products
