@@ -1,0 +1,10 @@
+todos la mang cac object
+<tr ng-repeat="item in todos">
+  <td ng-repeat="prop in item">{{prop}}</td>
+</tr>
+
+<tr ng-repeat="item in todos">
+  <td ng-repeat="(key, value) in item">
+    {{key}}={{value}}
+  </td>
+</tr>

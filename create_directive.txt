@@ -39,3 +39,47 @@ cartSumary.html
   </div>
   <a class="btn btn-default navbar-btn">Checkout</a>
 </div>
+
+-------------------------------------
+cach 2:
+
+angular.module('exampleApp').controller('dayController', function($scope) {
+  var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  $scope.day = dayNames[new Date().getDay()];
+  console.log(new Date().getDay());
+}).directive('highlight', function() {
+  return function(scope, element, attrs) {
+    if(scope.day == attrs['highlight']) {
+      element.css('color', 'red');
+    }
+  }
+});
+
+==================
+custom event directive, handle a event
+angular.module('directiveExApp', ['templates'])
+  .directive('tap', function() {
+    return function(scope, elem, attrs) {
+      elem.on('touchstart touchend', function(e) {
+        console.log(e.type);
+        scope.$apply(attrs['tap']);
+      });
+    }
+  });
+
+view:
+<div class="well" tap="message = 'Tapped!'">
+        {{message}}
+      </div>
+
+
+
+view
+<div ng-controller="dayController" class="panel" highlight="Sunday">
+    <div class="page-header">
+      <h3>AngularJS App</h3>
+    </div>
+    <h4>Today is {{day || "(unknow)"}}</h4>
+  </div>
+
+
