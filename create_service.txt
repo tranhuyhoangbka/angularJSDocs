@@ -33,3 +33,15 @@ angular.module('cart', [])
       }
     };
   });
+2, use service method
+days.js
+'use strict';
+angular.module('exampleApp').service('days', function() {
+  this.tomorrow = new Date().getDay() + 1;
+});
+
+controller:
+angular.module('exampleApp').controller('dayController', function($scope, days) {
+  $scope.day = days.tomorrow;
+  console.log($scope.day);
+})

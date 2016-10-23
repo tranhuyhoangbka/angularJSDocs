@@ -1,0 +1,30 @@
+https://docs.angularjs.org/api/ng/directive/ngOptions
+optgroup with ng-options
+<select ng-model="selectedValue" ng-options="item.id as item.action group by item.place for item in todos">
+  <option value="">(Pick One)</option>
+</select>
+--------------
+$scope.todos = [
+    { id: 1, action: "Get groceries", complete: true, place: 1},
+    {id: 2, action: "Call plumber", complete: false, place: 1},
+    {id: 3, action: "Buy running shoes", complete: true ,place: 2},
+    {id: 4, action: "Buy flowers", complete: false, place: 3 },
+    {id: 5, action: "Call family", complete: false, place: 2}
+  ];
+  $scope.categories = [
+    {id: 1, name: "Home"},
+    {id: 2, name: "Office"},
+    {id: 3, name: "Beach"}
+  ];
+
+$scope.getCategoryNameBy = function(item) {
+    var cate = _.find($scope.categories, {id: item.place});
+    if(!cate) return;
+    return cate.name;
+  };
+
+view:
+<select ng-model="selectedValue" ng-options="item.id as item.action group by getCategoryNameBy(item) for item in todos">
+            <option value="">(Pick One)</option>
+          </select>
+          <p>Selected: {{selectedValue || 'None'}}</p>

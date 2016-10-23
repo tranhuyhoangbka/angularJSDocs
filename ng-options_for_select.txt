@@ -1,0 +1,15 @@
+<select ng-model="selectValue"
+  ng-options="item.action for item in todos">
+</select>
+điều này sẽ set ng-model tới object trong array khi select
+----------
+vì vậy dùng as để set property của object cho ng-model
+<select ng-model="selectedValue" ng-options="item.id as item.action for item in todos">
+  <option value="">(Pick One)</option>
+</select>
+-------------
+optgroup with ng-options
+<select ng-model="selectedValue" ng-options="item.id as item.action group by item.place for item in todos">
+  <option value="">(Pick One)</option>
+</select>
+
