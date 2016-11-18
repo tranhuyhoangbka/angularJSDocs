@@ -1,4 +1,50 @@
-{{item.price | currency | orderBy:'category'}}
+{{item.price | currency:'£' | orderBy:'category'}} {{item.price | number:0}}
+getExpiryDate(p.expiry) | date:"dd MMM yy"
+{{getExpiryDate(p.expiry) | date:"shortDate"}}
+
+$scope.getExpiryDate = function(days) {
+    var now = new Date();
+    return now.setDate(now.getDate() + days);
+  };
+
 1, currency
 2, orderBy
 3, limitTo
+4, date
+5, json
+6, number
+7, uppercase
+8, lowercase
+
+có thể dùng limitTo cho một chuỗi string
+limitTo:x, x có thể là số âm, nếu vậy nó sẽ lấy x phần tử cuối cùng của mảng 
+
+yyyy A four-digit representation of the year (e.g., 2050)
+yy A two-digit representation of the year (e.g., 50)
+MMMM The full month name (e.g., January)
+MMM Short representation of the month (e.g., Jan)
+MM Numeric month, padded to two characters (e.g., 01)
+M Numeric month, without padding (e.g., 1)
+dd Day of month, padded to two characters (e.g., 02)
+d Day of month, no padding (e.g., 2)
+EEEE Full name of day of week (e.g., Tuesday)
+EEE Short name of day of week (e.g., Tue)
+HH Hour in day, 24-hour clock with padding to two characters (e.g., 02)
+H Hour in day, 24-hour clock without padding (e.g., 2)
+hh Hour in day, 12-hour clock with padding to two characters (e.g., 02)
+h Hour in day, 12-hour clock without padding (e.g., 2)
+mm Minute in hour, padded to two characters (e.g., 02)
+m Minute in hour without padding (e.g., 2)
+ss Second in minute, padded to two characters (e.g., 02)
+s Second in minute without padding (e.g., 2)
+a Marker for a.m./p.m.
+Z Four-character representation of time zone
+
+medium Equivalent to MMM d, y h:mm:ss a
+short Equivalent to M/d/yy h:mm a
+fullDate Equivalent to EEEE, MMMM d,y
+longDate Equivalent to MMMM d, y
+mediumDate Equivalent to MMM d, y
+shortDate Equivalent to M/d/yy
+mediumTime Equivalent to h:mm:ss a
+shortTime Equivalent to h:mm a
