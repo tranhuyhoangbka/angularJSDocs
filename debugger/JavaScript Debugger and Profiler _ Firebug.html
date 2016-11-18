@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+<title>JavaScript Debugger and Profiler : Firebug</title>
+
+<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="stylesheet" type="text/css" media="screen,projection" href="/styles/screen.css?v2">
+<link rel="stylesheet" type="text/css" media="screen,projection" href="/styles/jquery.fancybox.css">
+
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('a.view').fancybox({
+     'transitionIn' : 'elastic',
+     'transitionOut' : 'elastic',
+     'autoScale' : false,
+     'centerOnScroll' : true
+    });
+    $('a.lightbox').fancybox({
+     'transitionIn' : 'elastic',
+     'transitionOut' : 'elastic',
+     'hideOnContentClick' : true
+    });
+    $('a#whatsnew-show').click(function() {
+        $('#whatsnew15').toggle('slow');
+        return false;
+    });
+});
+</script>
+
+</head>
+
+<body id="article">
+<div id="wrap" class="group">
+
+<div id="header" class="group">
+
+<ul id="nav">
+<li><a href="/whatisfirebug">What is Firebug?</a>
+<span>Introduction and Features</span></li>
+<li><a href="http://getfirebug.com/faq/">Documentation</a>
+<span>FAQ and Wiki</span></li>
+<li><a href="/community">Community</a><span>Discussion forums and lists</span></li>
+<li><a href="/getinvolved">Get Involved</a><span>Hack the code, create extensions</span></li>
+</ul>
+
+<div id="logo-install" class="group">
+
+<div id="logo">
+<a href="/"></a>
+<h1>Firebug</h1>
+<h2>Web Development Evolved.</h2>
+</div>
+
+<!-- Do not display the install button on downloads page. -->
+
+<div id="install" class="group">
+
+    <p><a onclick="window.location.href='https://getfirebug.com/downloads/'; return false;" href="https://getfirebug.com/downloads">Install Firebug</a>
+        <span>for Firefox, 100% free and open source</span>
+    </p>
+<ul>
+<li><a href="https://github.com/firebug/firebug">Source</a></li>
+<li><a href="/firebuglite">Firebug Lite</a></li>
+<li><a href="http://getfirebug.com/wiki/index.php/Firebug_Extensions">Extensions</a></li>
+</ul>
+</div>
+
+
+</div> <!-- /END logo-install -->
+
+
+</div> <!-- /END header -->
+
+<div id="articleheader">
+<img src="/perch/resources/scriptpanel.png" alt="" /></div>
+
+<div id="secondary" class="group">
+
+<div id="contentarea" class="group">
+
+<div id="content" class="group">
+<h2 class="heading">JavaScript Debugger and Profiler</h2>
+
+<div class="article">
+
+<p class="bigPara">Firebug includes a powerful JavaScript debugger that lets you pause execution at any time and see what each variable looked like at that moment.  If your code is a little sluggish, use the JavaScript profiler to measure performance and find bottlenecks fast.</p>
+
+            <div class="section">
+
+                <img class="smallScreen" src="/img/js/screenScript-listing.png">
+                <h3>Find scripts easily</h3>
+                <p>Many web applications are comprised of quite a number of files, and finding the one you want to debug can be a chore. Firebug's script file chooser sorts and organizes files into very clean list that will help you find any file in a snap. You can also type to filter the list.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen odd" src="/img/js/screenScript-breakpoint.gif">
+                <h3>Pause execution on any line</h3>
+
+                <p>Firebug allows you to set breakpoints, which tell the debugger to pause execution when it reaches a specific line. While execution is pause, you can see the value of any variable and inspect objects while time is frozen.</p>
+                <p>To set breakpoints, just click on any line number, and a red dot will appear to indicate that the breakpoint is set. Click the red dot again to remove the breakpoint.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-cond.png">
+                <h3>Pause execution, but only if...</h3>
+                <p>Breakpoints can be troublesome if you find them breaking too often. Sometimes you only want to pause under very specific conditions. Firebug allows you to set conditional breakpoints, which check an expression that must be true for the breakpoint to pause.</p>
+
+                <p>To set a conditional breakpoint, just right-click on any line number. A bubble will appear that prompts you to enter a JavaScript expression. You can right-click again at any time to change the expression, or left-click to remove the breakpoint altogether.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen odd" src="/img/js/screenScript-step.gif">
+                <h3>One step at a time</h3>
+                <p>Once the debugger is paused, you can continue execution one line at a time. This allows you to see exactly how variables and objects are effected when a particular line is executed.</p>
+                <p>You can also choose to step execution for more than one line. From the context menu, choose "Run to this Line" to continue execution until it passes through the line you clicked.</p>
+
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-breakerror.png">
+                <h3>I break for errors</h3>
+                <p>You don't always choose to use the debugger. Sometimes the debugger chooses you. Firebug gives you the option to break into the debugger automatically when an error occurs so you can examine the screwed up conditions that got you into trouble.</p>
+            </div>
+
+            <div class="section">
+
+                <img class="smallScreen odd" src="/img/js/screenScript-stack.png">
+                <h3>Stack traces unstacked</h3>
+                <p>When the debugger is paused, Firebug shows you the call stack, which is the set of nested function calls that are currently running and waiting to return.</p>
+                <p>The call stack is represented as a compact strip of buttons in the toolbar, each with the name of a function on the stack.  You can click any button to jump to the line where that function is paused, and look at the local variables inside that function.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-watch.png">
+
+                <h3>Watch expressions</h3>
+                <p>While debugging, you often want to see the value of complex expressions or objects that are buried in the DOM.  Firebug allows you to type in arbitrary JavaScript expression whose value will be updated every time you step in the debugger.</p>
+                <p>As you type in these expressions, don't forget that you can use the tab key to autocomplete the properties of objects.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen odd" src="/img/js/screenScript-tooltip.gif">
+                <h3>Variable tooltips</h3>
+
+                <p>While the debugger is paused, you can move the mouse over any variable in the current function to see a tooltip that reveals the value of that variable.  It's a great way to keep your eye on the code and find answers as you read.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/logging/screenLogging-profile.gif">
+                <h3>Profile JavaScript performance</h3>
+                <p>Your web app is almost perfect.  You've got all the bugs worked out, the artwork has been dropped in, and the users are loving it.  Only one problem - some of your features are a little bit sluggish and you're not sure why.</p>
+                <p>With Firebug, you'll never again wonder why your code is slow.  Using the Firebug profiler, you can separate the tortoises from the hares within seconds.</p>
+
+                <p>To use the profiler, just go to the Console tab and click the "Profile" button.  Then use your app for a bit or reload the page and then click the "Profile" button again.  You'll then see a detailed report that shows what functions were called and how much time each one took.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen odd" src="/img/whatisfirebug/screenScript-logcalls.gif">
+                <h3>Logging function calls</h3>
+                <p>Sometimes a problematic function is called so many times that you can't break into the debugger every time.  You just want to know when it's called and what parameters were passed in.</p>
+                <p>To track all calls to a function, just right click on it in the Script tab and choose "Log calls to 'function name'".  Then hop over to the Console and watch the calls stream in.</p>
+
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-linejump.png">
+                <h3>Go directly to line 108, do not pass go</h3>
+                <p>Often times you want to jump directly to a specific line of your script.  Doing this couldn't be easier, just type the line number into the quick search box, preceded by the pound sign, as seen in the screen shot on the right.</p>
+            </div>
+             
+            <div class="section">
+                <img class="smallScreen odd" src="/img/js/BrowserGenereratedFunctions.png">
+                <h3>Browser and <code>eval()</code> generated code</h3>
+                <p>For various kinds of events Firefox generates small Javascript functions. These appear 
+                in Firebug under the URL of the page they were generated from followed by <code>event</code> and with 
+                a name derived from their source code. You can breakpoint these functions like any other. </p>
+                <p>Similarly Javascript created by <code>eval()</code> calls appear in the list of files under the
+                page URL that called <code>eval()</code>, with a source code summary for the name.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-exeLines.png">
+                <h3>Executable lines are marked</h3>
+                <p>Firebug's Script panel is using green color for a line number if the related line is executable. This way you can always know where to create a breakpoint.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-breakNotification.png">
+                <h3>Break notifications</h3>
+                <p>The debugger can halt JavaScript execution for many reasons. For example, the debugger can hit a standard script breakpoint, HTML breakpoint, XHR or error brakpoints, etc. To make sure the user understands the right reason a notification with details is displayed.</p>
+            </div>
+
+            <div class="section">
+                <img class="smallScreen" src="/img/js/screenScript-externalEditor.png">
+                <h3>Open in external editor</h3>
+                <p>Individual script files displayed by Firebug can be opened in external editors or IDEs. Firebug also allows to properly configure arguments such as line number, url, etc.</p>
+            </div>
+</div> <!-- /END article-->
+
+</div> <!-- /END content -->
+
+<div id="links">
+<h2 class="heading">Links and Elsewhere</h2>
+
+<div id="sidenav">
+<h3>What is Firebug?</h3>
+<ul>
+<li><a href="http://getfirebug.com/faq">Firebug FAQ</a></li>
+<li><a href="http://getfirebug.com/wiki/index.php">Firebug Wiki</a></li>
+<li><a href="/enable">Enabling Firebug</a></li>
+<li><a href="/html">HTML Development</a></li>
+<li><a href="/css">CSS Development</a></li>
+<li><a href="/layout">CSS Layout</a></li>
+<li><a href="/network">Network Monitoring</a></li>
+<li><a href="/javascript">Javascript Debugging</a></li>
+<li><a href="/errors">Finding Errors</a></li>
+<li><a href="/dom">DOM Exploration</a></li>
+<li><a href="/commandline">Javascript Command Line</a></li>
+<li><a href="/logging">Javascript Logging</a></li>
+<li><a href="/cookies">Cookies</a></li>
+</ul>
+</div>
+
+<!-- Delicious -->
+<div id="delicious-posts-firebug" class="delicious-posts">
+<h2 class="delicious-banner sidebar-title">Firebug around the web</h2>
+<script type="text/javascript" src="http://feeds.delicious.com/v2/js/firebugnews?count=10&amp;title=&amp;sort=date&amp;extended"></script></div>
+</div> <!-- /END links -->
+
+</div> <!-- /END contentarea -->
+
+</div> <!-- /END secondary -->
+
+<div id="footer" class="group">
+
+<div class="nav">
+<h3>Firebug</h3>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/downloads">Downloads</a></li>
+<li><a href="http://getfirebug.com/wiki/">Resources</a></li>
+<li><a href="/whatisfirebug">What is Firebug</a>
+</li>
+<li><a href="/community">Community</a></li>
+<li><a href="/getinvolved">Get Involved</a></li>
+<li><a href="http://blog.getfirebug.com/">Blog</a></li>
+</ul>
+</div>
+
+<div id="legal">
+<div id="copyright">
+<img src="/img/mozilla-logo.png" width="41" height="31" alt="Firefox Logo" />
+<p><span>Copyright &copy; 2005-2010 Mozilla.</span> All rights reserved.</p>
+</div>
+
+<ul>
+<li><a href="http://www.mozilla.com/en-US/privacy-policy.html">Privacy Policy</a></li>
+<li><a href="http://www.mozilla.com/en-US/about/legal.html">Legal Notices</a></li>
+
+</ul>
+</div>
+<div class="bigfirebug"></div>
+
+
+</div> <!-- /END footer -->
+</div> <!-- /END wrap -->
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-21831241-1']);
+  _gaq.push(['_setDomainName', '.getfirebug.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

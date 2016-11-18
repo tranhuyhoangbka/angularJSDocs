@@ -1,0 +1,7 @@
+$(document).ready(function () {
+  $('#jqui button').button().click(function (e) {
+    angular.element(angularRegion).scope().$apply('handleClick()');
+  });
+});
+
+angularRegion la id cua dom chua ng-controller

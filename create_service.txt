@@ -45,3 +45,19 @@ angular.module('exampleApp').controller('dayController', function($scope, days) 
   $scope.day = days.tomorrow;
   console.log($scope.day);
 })
+
+-------------
+Using module.service
+angular.module('commonApp')
+  .service('ZipCodes', function($rootScope) {
+    return {
+      setZipCode: function(type, zip) {
+        this[type] =  zip;
+        $rootScope.$broadcast('zipCodeUpdated', {
+          type: type, zipCode: zip
+        });
+      }
+    }
+  });
+
+
