@@ -19,6 +19,15 @@ $scope.getExpiryDate = function(days) {
 có thể dùng limitTo cho một chuỗi string
 limitTo:x, x có thể là số âm, nếu vậy nó sẽ lấy x phần tử cuối cùng của mảng 
 
+<tr ng-repeat="p in products | orderBy:'-price'"> s sắp xếp theo chiều giảm dần
+
+filter with function
+$scope.selectedItems = function(item) {
+    return item.category == 'fish' || item.category == 'beer';
+};
+
+<tr ng-repeat="p in products | filter:selectItems">
+
 yyyy A four-digit representation of the year (e.g., 2050)
 yy A two-digit representation of the year (e.g., 50)
 MMMM The full month name (e.g., January)

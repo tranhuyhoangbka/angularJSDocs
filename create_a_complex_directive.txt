@@ -1,0 +1,117 @@
+********************
+1, Định nghĩa cách directive được chấp nhận: element, attribute, class, comment
+
+Bình thường nếu define directive trả về một link function thì mặc định directive được apply như attributes trong view
+
+Để thay đổi mặc định này có thể dùng restrict property. Khi đó ta định nghĩa directive dùng definion object và dùng 
+restrict property.
+
+angular.module('exampleApp').directive('unorderedList', function() {
+  return {
+    link: function(scope, element, attrs) {
+    var data = scope[attrs["unorderedList"] || attrs["listSource"]];
+    if(angular.isArray(data)) {
+      var listElem = angular.element('<ul>').addClass('list-unstyled');
+      var propertyExpression = attrs['listProperty'] || 'price | currency';
+      if(element.nodeName === '#comment') {
+        element.parent().append(listElem);
+      } else {
+        element.append(listElem);
+      }
+      _.forEach(data, function(item, i) {
+        (function() {
+          var itemElem = angular.element('<li>');
+          listElem.append(itemElem);
+          var index = i;
+
+          var watcherFn = function(watchScope) {
+            return watchScope.$eval(propertyExpression, data[i]);
+          };
+
+          scope.$watch(watcherFn, function(newValue, oldValue) {
+            itemElem.text(newValue);
+          });
+        }());
+      });
+    }
+  },
+    restrict: "EACM"
+  }
+});
+
+E    Allows the directive to be applied as an element
+A    Allows the directive to be applied as an attribute
+C   Allows the directive to be applied as a class
+M   Allows the directive to be applied as a comment
+
+<unordered-list list-source="products" list-property="price | currency" />
+<div unordered-list="products" list-property="price | currency"></div>
+<div class="unordered-list: products" list-property="price | currency"></div>
+<div class="unordered-list: products, price | currency"></div>
+<!-- directive: unordered-list products -->
+**Chú ý ta đã truyền vào một giá trị config cho directive là products với : prefix điều này angular sẽ nhận thức rằng
+element có một attribute là unordered-list có giá trị là products.
+
+
+*****************************************************************
+2, Dùng directive templates
+Định nghĩa template của directive như một đoạn html string:
+
+a)
+angular.module('exampleApp').directive('unorderedList', function() {
+  return {
+    link: function(scope, element, attrs) {
+      scope.data = scope[attrs['unorderedList']];
+    },
+    template: "<ul class='list-unstyled'><li ng-repeat='item in data' ng-bind='item.price | currency'></li></ul>",
+    restrict: "EACM"
+  }
+});
+
+b) dùng function cho template option
+- ở ngoài view thêm:
+<script type="text/template" id="listTemplate">
+    <ul class="list-unstyled">
+      <li ng-repeat="item in data" ng-bind="item.price | currency"></li>
+    </ul>
+  </script>
+
+- Bên trong directive defintion tại template option:
+template: function() {
+      return angular.element(document.querySelector('#listTemplate')).html();
+    },
+*****************************************************************8
+3, Dùng templateUrl property để định nghĩa external template file
+a) 
+- view:
+<script type="text/ng-template" id="listTemplate.html">
+    <p>This is the list from the template file</p>
+    <ul class="list-unstyled">
+      <li ng-repeat="item in data" ng-bind="item.price | currency"></li>
+    </ul>
+  </script>
+
+- directive defintion:
+
+angular.module('exampleApp').directive('unorderedList', function() {
+  return {
+    link: function(scope, element, attrs) {
+      scope.data = scope[attrs['unorderedList']];
+    },
+    templateUrl: 'listTemplate.html',
+    restrict: "EACM"
+  }
+});
+
+b) Dùng function cho templateUrl property
+- Định nghĩa 2 templates bên ngoài view: listTemplate.html và tableTemplate.html
+- dùng function cho templateUrl property:
+templateUrl: function(elem, attrs) {
+      return attrs['template'] === 'table' ? 'tableTemplate.html' : 'listTemplate.html';
+    },
+
+******************************************************************************
+4, Dùng replace property để loại bỏ container element.
+
+Thêm replace: true tới defintion object directive.
+nó cũng move các attribute của container element tới element gốc của directive 

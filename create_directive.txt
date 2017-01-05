@@ -1,3 +1,11 @@
+Chú ý: worker function trong định nghĩa directive được gọi là link function
+
+*** chú ý rằng để lấy được data từ controller bên trong link function từ biến scope thì controller không thể được định nghĩa
+dưới dạng single controller với biến vm, mà phải dùng $scope controller
+
+có một loại worker function đó là compile function 
+
+compile function
 angular.module('module_name', []).directive('cartSumary', function(cart) {
     return {
       restrict: "E",
@@ -43,6 +51,7 @@ cartSumary.html
 -------------------------------------
 cach 2:
 
+link function 
 angular.module('exampleApp').controller('dayController', function($scope) {
   var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   $scope.day = dayNames[new Date().getDay()];
@@ -55,8 +64,17 @@ angular.module('exampleApp').controller('dayController', function($scope) {
   }
 });
 
+view
+<div ng-controller="dayController" class="panel" highlight="Sunday">
+    <div class="page-header">
+      <h3>AngularJS App</h3>
+    </div>
+    <h4>Today is {{day || "(unknow)"}}</h4>
+  </div>
 ==================
 custom event directive, handle a event
+
+link function 
 angular.module('directiveExApp', ['templates'])
   .directive('tap', function() {
     return function(scope, elem, attrs) {
@@ -74,12 +92,120 @@ view:
 
 
 
-view
-<div ng-controller="dayController" class="panel" highlight="Sunday">
-    <div class="page-header">
-      <h3>AngularJS App</h3>
-    </div>
-    <h4>Today is {{day || "(unknow)"}}</h4>
-  </div>
+
+===============================================
+angular.module('filterApp').directive('unorderedList', function() {
+  return function(scope, element, attrs) {
+    // implementation code will go here
+    var data = scope[attrs['unorderedList']];
+    var propertyName = attrs['listProperty'];
+    if(angular.isArray(data)) {
+      var listElem = angular.element('<ul>');
+      element.append(listElem);
+      for(var i = 0; i < data.length; i++) {
+        listElem.append(angular.element("<li>").text(data[i].name));
+      }
+    }
+  }
+})
+
+view:
+<div unordered-list="products" list-property="name"></div>
+
+//var propertyExpression = attrs['listProperty'];
+for(var i = 0; i < data.length; i++) {
+  listElem.append(angular.element("<li>").text(scope.$eval(propertyExpression, data[i])));
+}
+<div unordered-list="products" list-property="price | currency"></div>
+
+*****************
+scope.$eval(expression, item);
+in view
+<div unordered-list="products" list-property="price | currency"></div>
+
+in directive defining
+listElem.append(angular.element('<li>').text(scope.$eval(propertyExpression, item)));
+
+******************
+Custom directive with Change scope data use $watch
+if(angular.isArray(data)) {
+      var listElem = angular.element('<ul>').addClass('list-unstyled');
+      var propertyExpression = attrs['listProperty'];
+      element.append(listElem);
+      _.forEach(data, function(item, index) {
+        var itemElem = angular.element('<li>');
+        listElem.append(itemElem);
+
+        var watcherFn = function(watchScope) {
+          return watchScope.$eval(propertyExpression, data[index]);
+        };
+
+        scope.$watch(watcherFn, function(newValue, oldValue) {
+          itemElem.text(newValue);
+        });
+      });
+    }
+
+*******************************
+immediately invoked function expression (self executing function) with custom directive
+
+_.forEach(data, function(item, i) {
+        (function() {
+          var itemElem = angular.element('<li>');
+          listElem.append(itemElem);
+          var index = i;
+
+          var watcherFn = function(watchScope) {
+            return watchScope.$eval(propertyExpression, data[i]);
+          };
+
+          scope.$watch(watcherFn, function(newValue, oldValue) {
+            itemElem.text(newValue);
+          });
+        }());
+
+format:
+(function() {
+..........
+}());
+
+************************************************
+Working with JQLite
+
+angular.module('exampleApp').directive('demoDirective', function() {
+  return function(scope, element, attrs) {
+    var items = element.children();
+    _.forEach(items, function(item, index) {
+      if(items.eq(index).text() === 'Oranges') {
+        items.eq(index).css('font-weight', 'bold');
+      }
+    });
+  }
+});
+
+dùng eq method để thao tác với mỗi dom object trong array
+
+view:
+<ol demo-directive>
+        <li>Apples</li>
+        <li>Oranges</li>
+        <li>Pears</li>
+      </ol>
+
+* children chỉ trả về một tập con trực tiếp của element. Để tìm kiếm sâu hơn thì dùng find method
+var items = element.find('li');
+    _.forEach(items, function(item, index) {
+      if(items.eq(index).text() === 'Oranges') {
+        items.eq(index).css('font-weight', 'bold');
+      }
+    });
+
+Danh sách các methods phổ biến của jqLite là:
+children(), eq(index), find(tag), next(), parent()
+addClass(name), attr(name), attr(name, value), css(name), css(name, value), hasClass(name), prop(name), prop(name, value), removeAttr(name), removeClass(name), text(), text(value), toggleClass(name), val(), val(value)
+
+angular.element(html), after(elements), append(elements), clone(), prepend(elements), remove(), replaceWith(elements), 
+wrap(elements)
+
 
 
