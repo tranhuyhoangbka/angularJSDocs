@@ -115,3 +115,107 @@ templateUrl: function(elem, attrs) {
 
 Thêm replace: true tới defintion object directive.
 nó cũng move các attribute của container element tới element gốc của directive 
+
+*****************************************************************************
+QUẢN LÝ SCOPE
+
+5, Cho mỗi directive instance scope một scope riêng của nó.
+angular.module('exampleApp').directive('scopeDemo', scopeDemo);
+function scopeDemo() {
+  return {
+    template: "<div class='panel-body'>Name: <input ng-model='name'></div>",
+    scope: true
+  }
+}
+
+view:
+<div class="panel-body" scope-demo></div>
+<div class="panel-body" scope-demo></div>
+Giá trị của mỗi field không phụ thuộc vào gía trị của field còn lại
+
+*******************************************************************************
+6, isolated scope
+set: scope: {}
+cho defintion object
+
+tác dụng: model trong mỗi controller sẽ không ảnh hưởng tới model trong directive và ngược lại do mỗi instance directive có scope của riêng nó. nói cách khác isolated scope sẽ bị cắt khỏi scope hierarchy.
+
+*******************************************************
+7, isolated scope và binding thông qua một attributes (tạo one way binding cho isolated scope)
+Tóm tắt: giá trị của một directive scope property được lấy từ một attributes của element mà custom directive được apply
+
+- thay đổi trong định nghĩa directive
+  scope: {local: '@nameprop'}
+- Thay đổi ngoài view nơi directive được chấp nhận:
+  <div class="panel-body" scope-demo nameprop="{{data.name}}">Test</div>
+- Thay đổi view của directive
+  <script type="text/ng-template" id="scopeTemplate">
+    <div class="panel-body">
+      <p ng-bind="local"></p>
+    </div>
+  </script>
+
+Chú ý: nếu chúng ta thêm một instance khác của directive như bên dưới
+<div class="panel-body" scope-demo nameprop="{{data.name + 'Freeman'}}"></div>
+thì khi ta thay đổi giá trị của controller scope thì giá trị của local property trong 2 instance vẫn sẽ riêng rẽ và không phụ thuộc vào nhau
+
+
+*****************************************************************************
+8, Tạo two way binding cho isolated scope 
+- Trong directive defintion:
+  scope: {local: '=nameprop'}
+
+- Trong template của directive
+<script type="text/ng-template" id="scopeTemplate">
+    <div class="panel-body">
+      <input type="text" ng-model="local">
+    </div>
+  </script>
+
+- Trong view nơi directive được chấp nhận
+<div class="panel-body" scope-demo nameprop="data.name">Test</div>
+
+***********************************************************
+9, Evaluating Expression
+Mục đích: sử dụng lại hành vi đã được định nghĩa trong controller cho directive.
+
+- Trong định nghĩa directive
+scope: {
+      local: '=nameprop',
+      cityFn: '&city'
+    }
+cityFn: '&city' nói cho angular biết rằng: chúng ta muốn gán cityFn property cho một attribute tên là city và trong attribute này là một hành vi đã được định nghĩa trong controller.
+
+- Trong view nơi directive được chấp nhận:
+<div class="panel-body" scope-demo city="getCity(data.name)" nameprop="data.name">Test</>
+
+- Trong controller
+
+$scope.data = {name: "Adam", defaultCity: 'London'};
+  $scope.city = "London";
+
+  $scope.getCity = function(name) {
+    return name === 'Adam' ? $scope.data.defaultCity : 'Unknow';
+  };
+
+- Trong template của directive:
+<script type="text/ng-template" id="scopeTemplate">
+    <div class="panel-body">
+      <p>Name: {{local}}, City: {{cityFn()}}</p>
+    </div>
+  </script>
+
+*******************************************************************
+10, truyền tham số là data từ isolated scope vào expression của isolated scope
+- Trong view nơi directive được accepted
+<div class="panel-body" scope-demo city="getCity(nameVal)" nameprop="data.name">Test</div> 
+
+- Trong template của directive
+<script type="text/ng-template" id="scopeTemplate">
+    <div class="panel-body">
+      <p>Name: {{local}}, City: {{cityFn({nameVal: local})}}</p>
+    </div>
+  </script>
+
+
+

@@ -1,0 +1,104 @@
+1, Dùng transclude
+Mục đích của dùng transclude property là đưa nội dung được chèn vào directive element vào template của directive
+- Trong định nghĩa directive:
+return {
+    link: function(scope, element, attrs) {
+      scope.dataSource = 'directive';
+    },
+    restrict: 'E',
+    scope: true,
+    template: function() {
+      return angular.element(document.querySelector('#template')).html();
+    },
+    transclude: true
+  }
+
+- Trong template của directive:
+<script type="text/ng-template" id="template">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h4>This is the panel</h4></div>
+      <div class="panel-body" ng-transclude></div>
+    </div>
+  </script>
+
+- Trong view nơi directive được chấp nhận:
+<panel>The data value comes from the: {{dataSource}}</panel>
+
+Chú ý: mặc định thì {{dataSource}} lấy giá trị từ controller. Để {{dataSource}} lấy giá trị từ link function của directive ta cần set:
+scope: false 
+trong object defintion của directive.
+
+*********************************************************
+
+2, Compile function
+- directive:
+
+'use strict';
+
+angular.module('exampleApp').directive('simpleRepeater', simpleRepeater);
+function simpleRepeater() {
+  return {
+    scope: {
+      data: '=source',
+      propName: '@itemName'
+    },
+    transclude: 'element',
+    compile: function(element, attrs, transcludeFn) {
+      return function($scope, $element, $attr) {
+        console.log($scope.data)
+        $scope.$watch('data.length', function() {
+          var parent = $element.parent();
+          parent.children().remove();
+          _.forEach($scope.data, function(item, i) {
+            var childScope = $scope.$new();
+            childScope[$scope.propName] = $scope.data[i];
+            transcludeFn(childScope, function(clone) {
+              parent.append(clone);
+            });
+          });
+        });
+      }
+    }
+  }
+}
+
+
+- controller:
+'use strict';
+
+angular.module('exampleApp').controller('compileController', compileController);
+compileController.$inject = ['$scope'];
+
+function compileController($scope) {
+  $scope.products = [
+    { name: "Apples", price: 1.20 },
+    { name: "Bananas", price: 2.42 },
+    { name: "Pears", price: 2.02 }
+  ];
+
+  $scope.changeData = function() {
+    $scope.products.push({name: "Cherries", price: 4.02});
+    _.forEach($scope.products, function(product, i) {
+      $scope.products[i].price++;
+    });
+  };
+}
+
+- view:
+<div class="col-md-8 col-md-offset-2" ng-app="exampleApp"
+  ng-controller="compileController">
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr simple-repeater source="products" item-name="item">
+        <td>{{item.name}}<td>{{item.price | currency}}</td></td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-default text" ng-click="changeData()">Change</button>
+</div>
+
+*************************************************************
+3, Dùng controller trong directive
+
+
