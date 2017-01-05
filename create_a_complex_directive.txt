@@ -115,3 +115,29 @@ templateUrl: function(elem, attrs) {
 
 Thêm replace: true tới defintion object directive.
 nó cũng move các attribute của container element tới element gốc của directive 
+
+*****************************************************************************
+QUẢN LÝ SCOPE
+
+5, Cho mỗi directive instance scope một scope riêng của nó.
+angular.module('exampleApp').directive('scopeDemo', scopeDemo);
+function scopeDemo() {
+  return {
+    template: "<div class='panel-body'>Name: <input ng-model='name'></div>",
+    scope: true
+  }
+}
+
+view:
+<div class="panel-body" scope-demo></div>
+<div class="panel-body" scope-demo></div>
+Giá trị của mỗi field không phụ thuộc vào gía trị của field còn lại
+
+*******************************************************************************
+6, isolated scope
+set: scope: {}
+cho defintion object
+
+tác dụng: model trong mỗi controller sẽ không ảnh hưởng tới model trong directive và ngược lại do mỗi instance directive có scope của riêng nó. nói cách khác isolated scope sẽ bị cắt khỏi scope hierarchy.
+
+
