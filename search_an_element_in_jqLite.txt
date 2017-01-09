@@ -1,3 +1,5 @@
 use DOM API
 
 angular.element(document.querySelector('#listTemplate')).html()
+
+document.querySelector('#productTemplate').outerText
