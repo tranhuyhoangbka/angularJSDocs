@@ -1,0 +1,5 @@
+function defaultController($scope, $location, $interval, $window, $document, logService) {
+  $document.find('button').on('click', function(event) {
+    $window.alert(event.target.innerText);
+  });
+}

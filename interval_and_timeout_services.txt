@@ -1,0 +1,7 @@
+$interval và $timeout đều giống nhau là sẽ làm chậm sự thực thi một function trong một khoảng thời gian xác định
+chỉ khác là $timeout chỉ thực hiện function một lần duy nhất còn $interval sẽ thực hiện function mãi mãi theo chu kì thời 
+gian xác định 
+
+$interval(function() {
+    $scope.time = new Date().toTimeString();
+  }, 2000);

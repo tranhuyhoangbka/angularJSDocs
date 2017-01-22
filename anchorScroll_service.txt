@@ -1,0 +1,43 @@
+Service này dùng để scroll window bề đúng vị trí của div có id là hash value của url hiện tại (giá trị được
+lấy từ $location.hash())
+
+function defaultController($scope, $anchorScroll, $location) {
+  $scope.itemCount = 50;
+  $scope.items = [];
+
+  for(var i = 0; i < $scope.itemCount; i++) {
+    $scope.items[i] = 'Item ' + i;
+  }
+
+  $scope.show = function(id) {
+    $location.hash(id);
+    if(id == 'bottom') {
+      $anchorScroll();
+    }
+  };
+}
+
+angular.module('exampleApp', ['customDirectives', 'customServices'])
+  .config(function($anchorScrollProvider) {
+    $anchorScrollProvider.disableAutoScrolling();
+  });
+
+view
+
+<div class="panel panel-default">
+    <div class="panel-body">
+      <p id="top">This is the top</p>
+      <button class="btn btn-primary" ng-click="show('bottom')">
+        Go to bottom
+      </button>
+      <p>
+        <ul>
+          <li ng-repeat="item in items">{{item}}</li>
+        </ul>
+      </p>
+      <p id="bottom">
+        This is the bottom
+      </p>
+      <button class="btn btn-primary" ng-click="show('top')">Go to top</button>
+    </div>
+  </div>

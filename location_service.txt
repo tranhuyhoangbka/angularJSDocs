@@ -1,0 +1,50 @@
+$scope.$on('$locationChangeSuccess', function(event, newUrl) {
+    $scope.url = newUrl;
+  });
+
+  $scope.setUrl = function(component) {
+    switch(component) {
+      case 'reset':
+        $location.path('');
+        $location.hash('');
+        $location.search('');
+        break;
+      case 'path':
+        $location.path('/cities/london');
+        break;
+      case 'hash':
+        $location.hash('north');
+        break;
+      case 'search':
+        $location.search('select', 'hotels');
+        break;
+      case 'url':
+        $location.url('/cities/lodon?select=hotels#north');
+        break;
+    }
+  };
+
+
+The URL is: http://localhost:3000/domApi.html#/cities/lodon?select=hotels#north
+
+*** Bật html5Mode
+khi dùng $location để thay đổi các thành phần trên url ta thấy url sẽ xuất hiện thêm dấu # điều này làm cho url trở nên
+xấu xí, để thay đổi điều này ta cần bật html5Mode thông qua $locationProvider của $location service
+
+angular.module('exampleApp', [])
+  .config(function($locationProvider) {
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });
+  });
+
+để bật html5Mode trình duyệt cần hỗ trợ History API, 
+vì vậy để an toàn ta cần check xem trình duyệt có hỗ trợ History API không
+
+if(window.history && history.pushState) {
+  $locationProvider.html5Mode({
+    enabled: true,
+    requireBase: false
+  });
+}
