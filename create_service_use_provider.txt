@@ -1,0 +1,73 @@
+provider function trả về một provider object
+provider object định nghĩa một $get method mà trả về service object
+ưu điểm của việc dùng provider method là có thể thêm function tới provider method mà có thể được dùng để config service 
+object.
+
+1,
+
+'use strict';
+
+angular.module('customServices', []).provider('logService', logService);
+
+function logService() {
+  return {
+    $get: function() {
+      return {
+        messageCount: 0,
+        log: function(msg) {
+          console.log('Log ' + this.messageCount++ + ' ' + msg);
+        }
+      };
+    }
+  };
+}
+
+sau đó khai báo dependency và dùng như bình thường
+
+2, Thêm các function tới provider object để config service object:
+
+'use strict';
+
+angular.module('customServices', []).provider('logService', logService);
+
+function logService() {
+  var counter = true;
+  var debug = true;
+  return {
+    messageCounterEnabled: function(setting) {
+      if(angular.isDefined(setting)) {
+        counter = setting;
+        return this;
+      } else {
+        return counter;
+      }
+    },
+    debugEnabled: function(setting) {
+      if(angular.isDefined(setting)) {
+        debug = setting;
+        return this;
+      } else {
+        return debug;
+      }
+    },
+    $get: function() {
+      return {
+        messageCount: 0,
+        log: function(msg) {
+          if(debug) {
+            console.log('Log ' + (counter ? (this.messageCount++) : '' ) + msg);
+          }
+        }
+      };
+    }
+  };
+}
+
+
+Sau đó dùng config để dùng provider object
+
+angular.module('exampleApp', ['customDirectives', 'customServices'])
+  .config(function(logServiceProvider) {
+    logServiceProvider.debugEnabled(true).messageCounterEnabled(false);
+  });
+

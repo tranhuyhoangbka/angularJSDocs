@@ -1,0 +1,27 @@
+'use strict';
+
+angular.module('customServices', []).factory('logService', logService);
+
+function logService() {
+  var messageCount = 0;
+  return {
+    log: function(msg) {
+      console.log('LOG ' + messageCount + msg);
+    }
+  };
+}
+
+===============
+1, use for controller
+
+angular.module('exampleApp', ['customDirectives', 'customServices']);
+angular.module('exampleApp').controller('defaultController', defaultController);
+defaultController.$inject = ['$scope', 'logService'];
+
+==============
+2, use for custom directive
+
+angular.module('customDirectives', ['customServices']);
+angular.module('customDirectives').directive('newtriButton', newtriButton);
+
+function newtriButton(logService) {
