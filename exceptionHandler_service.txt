@@ -1,0 +1,33 @@
+1,
+$scope.throwEx = function() {
+    throw new Error("Triggered Exception");
+  };
+
+
+<button class="btn btn-primary" ng-click="throwEx()">Throw Exception</button>
+
+2,
+function defaultController($scope, $exceptionHandler) {
+  $scope.throwEx = function() {
+    try{
+      throw new Error('Triggered Exception');
+    } catch(ex) {
+      $exceptionHandler(ex.message, 'button click');
+    }
+  };
+}
+
+
+3, custom $exceptionHandler service 
+angular.module('exampleApp', []).factory('$exceptionHandler', function($log) {
+    return function(exception, cause) {
+      $log.error("Message: " + exception.message + ' ' + 'Cause: ' + cause);
+    }
+
+ $scope.throwEx = function() {
+    try{
+      throw new Error('Triggered Exception');
+    } catch(ex) {
+      $exceptionHandler(ex, 'button click');
+    }
+  };
