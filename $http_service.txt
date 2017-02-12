@@ -1,0 +1,246 @@
+1, 
+$scope.loadData = function() {
+    $http.get('/products').success(function(data) {
+      $scope.products = data;
+    });
+  }
+
+2, ajax request được tạo bởi $http service trả về promise object. Promise object có định nghĩa các methods sẽ được gọi khi operation được complete.
+các methods của promise object là:
+
+success(fn) Invokes the specified function when the HTTP request has successfully completed
+error(fn) Invokes the specified function when the request does not complete successfully
+then(fn, fn) Registers a success function and an error function
+Kết quả từ error, success method cũng là một promise object, nó cho phép gọi các methods đó chained với nhau trong một single statement
+
+3, then method
+object mà pass tới then method các properties sau: data, status, headers, config
+
+$scope.loadData = function() {
+    $http.get('/products').then(function(response) {
+      console.log('status: ' + response.status);
+      console.log('type: ' + response.headers('content-type'));
+      console.log('length: ' + response.headers('content-length'));
+      $scope.products = response.data;
+    }, function(error) {
+      console.log(error.data);
+    });
+  }
+
+4, Xử lý xml request.
+class ProductsController < ApplicationController
+  def index
+    respond_to do |format|
+      format.json{render json: Product.all}
+      format.xml{render xml: Product.all}
+    end
+  end
+end
+
+$scope.loadData = function() {
+    $http.get('/products.xml').then(function(response) {
+      $scope.products = [];
+      var productElems = angular.element(response.data.trim()).find("product");
+      for(var i = 0; i < productElems.length; i++) {
+        var product = productElems.eq(i);
+        product = angular.element(product);
+        $scope.products.push({
+          name: product.attr('name'),
+          category: product.attr('category'),
+          price: product.attr('price')
+        });
+      }
+    }, function(error) {
+      console.log(error.data);
+    });
+  }
+
+5, config ajax request
+a) Transforming a response
+
+$scope.loadData = function () {
+var config = {
+transformResponse: function (data, headers) {
+if(headers("content-type") == "application/xml"
+&& angular.isString(data)) {
+products = [];
+var productElems = angular.element(data.trim()).find("product");
+for (var i = 0; i < productElems.length; i++) {
+var product = productElems.eq(i);
+products.push({
+name: product.attr("name"),
+category: product.attr("category"),
+price: product.attr("price")
+});
+}
+return products;
+} else {
+return data;
+}
+}
+}
+ 
+$http.get("productData.xml", config).success(function (data) {
+$scope.products = data;
+});
+}
+
+b) transforming a request
+
+$scope.sendData = function() {
+var config = {
+headers: {
+"content-type": "application/xml"
+},
+transformRequest: function (data, headers) {
+var rootElem = angular.element("<xml>");
+for (var i = 0; i < data.length; i++) {
+var prodElem = angular.element("<product>");
+prodElem.attr("name", data[i].name);
+prodElem.attr("category", data[i].category);
+prodElem.attr("price", data[i].price);
+rootElem.append(prodElem);
+}
+rootElem.children().wrap("<products>");
+return rootElem.html();
+}
+}
+$http.post("ajax.html", $scope.products, config);
+}
+
+----------------------------------------------------------------
+6, Setting ajax defaults
+Có thể định nghĩa các default settings cho ajax requests của $http service dùng $httpProvider
+
+defaults.headers.common    Defines the default headers used for all requests.
+defaults.headers.post      Defines the headers used for POST requests.
+defaults.headers.put       Defines the headers used for PUT requests.
+defaults.transformResponse An array of transform functions that are applied to all responses.
+defaults.transformRequest  An array of transform functions that are applied to all requests.
+interceptors               An array of interceptor factory functions. Interceptors are a more sophisticated form of 
+                           transform function. I explain how they work in the next section.
+withCredentials            Sets the withCredentials option for all requests. This property is used to
+                           address cross-origin requests that require authentication, and I demonstrated
+                           its use in Chapter 8.
+
+
+a) $httpProvider.defaults.transformResponse
+
+angular.module("exampleApp", [])
+.config(function($httpProvider) {
+$httpProvider.defaults.transformResponse.push(function (data, headers) {
+if (headers("content-type") == "application/xml"
+&& angular.isString(data)) {
+products = [];
+var productElems = angular.element(data.trim()).find("product");
+for (var i = 0; i < productElems.length; i++) {
+var product = productElems.eq(i);
+products.push({
+name: product.attr("name"),
+category: product.attr("category"),
+price: product.attr("price")
+});
+}
+return products;
+} else {
+return data;
+}
+});
+})
+
+b) $httpProvider.interceptors
+
+angular.module("exampleApp", [])
+.config(function ($httpProvider) {
+$httpProvider.interceptors.push(function () {
+return {
+request: function (config) {
+config.url = "productData.json";
+return config;
+},
+response: function (response) {
+console.log("Data Count: " + response.data.length);
+return response;
+}
+}
+});
+})
+
+-----------------------------------------------------------------
+6, Working with Promises
+$q service của angular dùng để obtaining và quản lý các promises.
+
+các methods được định nghĩa bởi $q
+
+all(promises)  Returns a promise that is resolved when all of the promises in 
+               the specified array are resolved or any of them is rejected
+defer()        Creates a deferred object
+reject(reason) Returns a promise that is always rejected
+when(value)    Wraps a value in a promise that is always resolved (with the specified value as a result)
+
+- Tạo và dùng deferred object
+các methods được định nghĩa bởi deferred object
+
+resolve(result)   Signals that the deferred activity has completed with the specified value
+reject(reason)    Signals that the deferred activity has failed or will not be completed for the specified reason
+notify(result)    Provides an interim result from the deferred activity
+promise           Returns a promise object that receives the signals from the other methods
+
+- directive
+
+angular.module('exampleApp').directive('promiseWorker', function($q) {
+  var deferred = $q.defer();
+  return {
+    link: function(scope, element, attrs) {
+      element.find('button').on('click', function(event) {
+        // alert("ok");
+        var buttonText = event.target.innerText;
+        console.log(buttonText);
+        if(buttonText === "Abort") {
+          deferred.reject("Abort");
+        } else {
+          deferred.resolve(buttonText);
+        }
+      });
+    },
+    controller: function($scope, $element, $attrs) {
+      this.promise = deferred.promise;
+    }
+  }
+}).directive('promiseObserver', function() {
+  return {
+    require: '^promiseWorker',
+    link: function(scope, element, attrs, ctrl) {
+      ctrl.promise.then(function(result) {
+        element.text(result);
+      }, function(reason) {
+        element.text('Fail (' + reason + ')');
+      });
+    }
+  }
+});
+
+
+- view
+<div class="col-md-8 col-md-offset-2" ng-app="exampleApp"
+  ng-controller="defaultController">
+  <div class="well" promise-worker>
+    <button class="btn btn-primary">Heads</button>
+    <button class="btn btn-primary">Tails</button>
+    <button class="btn btn-primary">Abort</button>
+    Outcome: <span promise-observer></span>
+  </div>
+</div>
+
+-------------------------------------------------
+7, chaining các promises:
+
+link: function(scope, element, attrs, ctrl) {
+      ctrl.promise.then(function(result) {
+        return 'Success (' +result + ')';
+      }, function(reason) {
+        element.text('Fail (' + reason + ')');
+      }).then(function(result) {
+        element.text(result);
+      });
+    }

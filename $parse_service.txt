@@ -1,0 +1,37 @@
+Service này thường dùng khi tạo một custom directive để chuyển đổi một expression bên view thành một function mà
+có thể được dùng trong định nghĩa directive
+
+view:
+<div class="col-md-8 col-md-offset-2" ng-app="exampleApp"
+  ng-controller="defaultController">
+  <div class="well">
+    <p><input type="text" ng-model="expr" class="form-control"></p>
+    <div>
+      Result: <span eval-expression="expr"></span>
+    </div>
+  </div>
+</div>
+
+directive:
+
+'use strict';
+
+angular.module('exampleApp').directive('evalExpression', evalExpression);
+
+function evalExpression($parse) {
+  return function(scope, element, attrs) {
+    scope.$watch(attrs['evalExpression'], function(newValue) {
+      try {
+        var expressionFn = $parse(scope.expr);
+        var result = expressionFn(scope);
+        if(_.isUndefined(result)) {
+          result = 'No result';
+        }
+      } catch(err) {
+        result = 'Cannot evaluate expression';
+      }
+      element.text(result);
+    });
+  }
+}
+

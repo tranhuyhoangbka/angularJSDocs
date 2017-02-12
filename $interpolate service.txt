@@ -1,0 +1,83 @@
+1, $interpolate service cũng giống với $parse service, nhưng nó khác ở chỗ nó có thể eval một string chứa bên trong 1 expression
+
+- directive
+'use strict';
+
+angular.module('exampleApp').directive('evalExpression', evalExpression);
+evalExpression.$inject = ['$interpolate'];
+
+function evalExpression($interpolate) {
+  var interpolateFn = $interpolate('the total is: {{amount | currency}} (including tax)');
+  return {
+    scope: {
+      amount: '=amount',
+      tax: '=tax'
+    },
+    link: function(scope, element, attrs) {
+      scope.$watch('amount', function(newValue) {
+        var localData = {total: Number(newValue) + (Number(newValue) * (Number(scope.tax) /100))}
+        element.text(interpolateFn(scope));
+      });
+    }
+  }
+}
+
+- view
+<div class="col-md-8 col-md-offset-2" ng-app="exampleApp"
+  ng-controller="defaultController">
+  <div class="well">
+    <p><input class="form-control" ng-model="dataVal"></p>
+    <div>Result: <span eval-expression amount="dataVal" tax="10"></span></div>
+  </div>
+</div>
+
+
+2, $interpolateProvider 
+$interpolateProvider giúp thay đổi setting của $interpolate. Điều này có nghĩa là nó có thể thay đổi cấu hình của inline
+binding
+
+Ví dụ sau sẽ thay đổi cặp {{}} thành !!  !! cho inline binding
+- directive
+
+angular.module("exampleApp", [])
+.config(function($interpolateProvider) {
+$interpolateProvider.startSymbol("!!");
+$interpolateProvider.endSymbol("!!");
+})
+.controller("defaultCtrl", function ($scope) {
+$scope.dataValue = "100.23";
+})
+.directive("evalExpression", function ($interpolate) {
+var interpolationFn
+= $interpolate("The total is: !!amount | currency!! (including tax)");
+return {
+scope: {
+amount: "=amount",
+tax: "=tax"
+},
+link: function (scope, element, attrs) {
+scope.$watch("amount", function (newValue) {
+var localData = {
+total: Number(newValue)
++ (Number(newValue) * (Number(scope.tax) / 100))
+}
+element.text(interpolationFn(scope));
+});
+}
+}
+});
+
+- view
+
+<body ng-controller="defaultCtrl">
+<div class="well">
+<p><input class="form-control" ng-model="dataValue" /></p>
+<div>
+<span eval-expression amount="dataValue" tax="10"></span>
+<p>Original amount: !!dataValue!!</p>
+</div>
+</div>
+</body>
+
+inline binding của angular được xử lý bởi $interpolate service, mà service objects là singleton vì vậy sự thay đổi của config sẽ có tác dụng trên toàn module
+

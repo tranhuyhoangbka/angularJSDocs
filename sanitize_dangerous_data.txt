@@ -1,0 +1,28 @@
+1, Bình thường thì ng-bind và {{}} đều sẽ escape data trước khi hiển thị các thẻ html, css, javascript hoàn toàn sẽ không có
+tác dụng gì.
+
+2, Để các thẻ safe html có hiệu lực khi hiển thị ta sử dụng ng-bind-html directive
+Để sử dụng được directive này ta cần inject vào application ngSanitize module, module này cần download vì nó không là build-in
+trong angular library
+
+ng-bind-html sẽ auto sử dụng $sanitize service có trong ngSanitize module để lọc data, các thẻ, attributes html nguy hiển sẽ bị
+loại bỏ trước khi hiển thị như: script, css element, inline javascript, css code, và bất kỳ thứ gì nguy hiểm
+
+3, Dùng $sanitize service trực tiếp
+Để dùng được nó thì phải import ngSanitize module vào app, và $sanitize vào controller
+$scope.dangerousData = "<p>This is <b onmouseover=alert('Attack!')>dangerous</b> data</p>";
+$scope.$watch('dangerousData', function(newValue) {
+    $scope.htmlData = $sanitize(newValue);
+  });
+
+$sanitize sẽ loại bỏ những dangerous html tags và attributes trong string đầu vào 
+
+4, Dùng $sce service để hiển thị raw data mà không bị escape cũng như sanitize
+chú ý data dùng với $sce service cần phải là data tuyệt đối an toàn và tất nhiên không phải là dữ liệu được nhập từ user 
+
+$scope.dangerousData = "<p>This is <b onmouseover=alert('Attack!')>dangerous</b> data</p>";
+  $scope.$watch('dangerousData', function(newValue) {
+    $scope.trustData = $sce.trustAsHtml(newValue);
+  });
+
+<p ng-bind-html="trustData"></p>

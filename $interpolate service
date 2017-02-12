@@ -1,0 +1,33 @@
+$interpolate service cũng giống với $parse service, nhưng nó khác ở chỗ nó có thể eval một string chứa bên trong 1 expression
+
+- directive
+'use strict';
+
+angular.module('exampleApp').directive('evalExpression', evalExpression);
+evalExpression.$inject = ['$interpolate'];
+
+function evalExpression($interpolate) {
+  var interpolateFn = $interpolate('the total is: {{amount | currency}} (including tax)');
+  return {
+    scope: {
+      amount: '=amount',
+      tax: '=tax'
+    },
+    link: function(scope, element, attrs) {
+      scope.$watch('amount', function(newValue) {
+        var localData = {total: Number(newValue) + (Number(newValue) * (Number(scope.tax) /100))}
+        element.text(interpolateFn(scope));
+      });
+    }
+  }
+}
+
+- view
+<div class="col-md-8 col-md-offset-2" ng-app="exampleApp"
+  ng-controller="defaultController">
+  <div class="well">
+    <p><input class="form-control" ng-model="dataVal"></p>
+    <div>Result: <span eval-expression amount="dataVal" tax="10"></span></div>
+  </div>
+</div>
+

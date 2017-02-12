@@ -60,4 +60,19 @@ angular.module('commonApp')
     }
   });
 
+----------------------------------------------------
+Cách tạo Service mà các xử lý logic được run ngay khi service được gọi
+
+angular.module('exampleApp', []).factory('$exceptionHandler', function($log) {
+    return function(exception, cause) {
+      $log.error("Message: " + exception.message + ' ' + 'Cause: ' + cause);
+    }
+
+ $scope.throwEx = function() {
+    try{
+      throw new Error('Triggered Exception');
+    } catch(ex) {
+      $exceptionHandler(ex, 'button click');
+    }
+  };
 
